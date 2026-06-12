@@ -3,17 +3,33 @@
     "short_name": "超盟管理系統",
     "start_url": ".",
     "display": "standalone",
-    "background_color": "#0175C2",
+    "background_color": "#ffffff",
     "theme_color": "#0175C2",
-    "description": "A new Flutter project.",
+    "description": "超盟工程管理系統",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
     "icons": [
-    {
-      "src": "app.jpg",
-      "sizes": "1024x1024",
-      "type": "image/jpeg",
-      "purpose": "any maskable"
-    }
-  ]
+        {
+            "src": "icons/Icon-192.png",
+            "sizes": "192x192",
+            "type": "image/png"
+        },
+        {
+            "src": "icons/Icon-512.png",
+            "sizes": "512x512",
+            "type": "image/png"
+        },
+        {
+            "src": "icons/Icon-maskable-192.png",
+            "sizes": "192x192",
+            "type": "image/png",
+            "purpose": "maskable"
+        },
+        {
+            "src": "icons/Icon-maskable-512.png",
+            "sizes": "512x512",
+            "type": "image/png",
+            "purpose": "maskable"
+        }
+    ]
 }
