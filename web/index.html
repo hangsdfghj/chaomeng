@@ -4,7 +4,7 @@
   <base href="/">
 
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, interactive-widget=resizes-content">
   <meta content="IE=Edge" http-equiv="X-UA-Compatible">
   <meta name="description" content="超盟工程管理系統">
 
@@ -19,29 +19,47 @@
   <link rel="manifest" href="manifest.json?v=3">
 
   <style>
+    /* 鎖死畫布，強制固定在最頂部，不允許被鍵盤推上去下不來 */
     body, html {
       width: 100%;
       height: 100%;
       margin: 0;
       padding: 0;
-      overflow: hidden;
-      background-color: #f5f5f5;
+      overflow: hidden !important;
+      position: fixed; 
+      top: 0;
+      left: 0;
     }
   </style>
 </head>
 <body>
   <script>
-    let lastHeight = window.innerHeight;
-    window.addEventListener('resize', () => {
-      // 如果視窗高度突然變大超過 50px，代表系統鍵盤被收起來了
-      if (window.innerHeight > lastHeight + 50) {
-        // 強制讓網頁底層失去焦點，這會直接通知 Flutter 收回白塊殘影！
-        if (document.activeElement) {
-          document.activeElement.blur();
+    // 🚀 終極殺手鐧：VisualViewport API 
+    // 這是現代瀏覽器專門用來「精準捕捉」虛擬鍵盤高度的唯一標準
+    if (window.visualViewport) {
+      let maxHeight = window.visualViewport.height;
+      
+      window.visualViewport.addEventListener('resize', () => {
+        // 隨時記錄螢幕的最大高度 (代表鍵盤完全收起時的真實高度)
+        if (window.visualViewport.height > maxHeight) {
+          maxHeight = window.visualViewport.height;
         }
-      }
-      lastHeight = window.innerHeight;
-    });
+        
+        // 當目前可視高度恢復到接近最大高度時 (代表系統返回鍵強殺了鍵盤)
+        if (window.visualViewport.height >= maxHeight - 50) {
+          
+          // 1. 強制拔除所有底層隱藏輸入框的焦點，通知 Flutter 放棄鎖定
+          if (document.activeElement) {
+            document.activeElement.blur();
+          }
+          
+          // 2. 最關鍵：把被瀏覽器強制推上去的網頁畫布，狠狠拉回座標 (0,0)！
+          window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+          document.body.scrollTop = 0;
+          document.documentElement.scrollTop = 0;
+        }
+      });
+    }
   </script>
 
   <script src="flutter_bootstrap.js" async></script>
